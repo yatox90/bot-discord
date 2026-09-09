@@ -16,6 +16,46 @@ from keep_alive import keep_alive
 
 load_dotenv()
 
+intents = discord.Intents.default()
+intents.message_content = True
+intents.voice_states = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+
+@bot.event
+async def on_ready():
+    print(f"✅ Connecté en tant que {bot.user}")
+
+
+@bot.command()
+async def join(ctx):
+    """Fait rejoindre le bot au vocal où tu es."""
+
+    if not ctx.author.voice:
+        await ctx.send("❌ Tu dois être dans un salon vocal !")
+        return
+
+    channel = ctx.author.voice.channel
+
+    if ctx.voice_client:
+        await ctx.voice_client.move_to(channel)
+    else:
+        await channel.connect()
+
+    await ctx.send(f"🔊 Je viens de rejoindre **{channel.name}** !")
+
+
+@bot.command()
+async def leave(ctx):
+    """Fait quitter le bot le vocal."""
+
+    if ctx.voice_client:
+        await ctx.voice_client.disconnect()
+        await ctx.send("👋 J'ai quitté le vocal.")
+    else:
+        await ctx.send("❌ Je ne suis dans aucun vocal.")
+
 
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
