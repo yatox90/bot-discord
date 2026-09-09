@@ -12,7 +12,6 @@ from collections import defaultdict, deque
 from discord.ext import commands, tasks
 from google import genai
 from google.genai import types
-from keep_alive import keep_alive
 
 load_dotenv()
 
@@ -2032,5 +2031,4 @@ async def on_command_error(
 if __name__ == "__main__":
 
 
-    keep_alive()
     bot.run(DISCORD_TOKEN)
